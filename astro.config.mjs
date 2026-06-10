@@ -6,9 +6,13 @@ import mdx from '@astrojs/mdx';
 import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
-  site: 'https://gibran.id',
+  site: 'https://demo.gibran.id',
   output: 'static',
   adapter: cloudflare(),
+  // Static site never uses sessions; opt out of the adapter's default
+  // Cloudflare KV session driver so it stops provisioning a SESSION KV
+  // namespace (which caused redeploy error 10014: namespace title exists).
+  session: { driver: { entrypoint: 'unstorage/drivers/null' } },
   integrations: [sitemap(), mdx()],
   vite: {
     plugins: [tailwindcss()],
